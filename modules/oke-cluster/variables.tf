@@ -1,62 +1,58 @@
 ################################################################################
-# OCI Authentication Variables
+# General Variables
 ################################################################################
 
-variable "tenancy_ocid" {
-  description = "OCID of the tenancy"
-  type        = string
-}
-
-variable "user_ocid" {
-  description = "OCID of the user"
-  type        = string
-}
-
-variable "private_key_path" {
-  description = "Path to the private key file"
-  type        = string
-}
-
-variable "fingerprint" {
-  description = "Fingerprint of the public key"
+variable "compartment_ocid" {
+  description = "OCID of the compartment"
   type        = string
 }
 
 variable "region" {
   description = "OCI region"
   type        = string
-  default     = "us-phoenix-1"
-}
-
-################################################################################
-# General Variables
-################################################################################
-
-variable "compartment_ocid" {
-  description = "OCID of the compartment where resources will be created"
-  type        = string
 }
 
 variable "environment" {
   description = "Environment name"
   type        = string
-  default     = "dev"
 }
 
 ################################################################################
-# OKE Cluster Variables
+# Cluster Variables
 ################################################################################
 
 variable "cluster_name" {
   description = "Name of the OKE cluster"
   type        = string
-  default     = "oke-cluster"
 }
 
 variable "kubernetes_version" {
   description = "Kubernetes version for OKE cluster"
   type        = string
-  default     = "v1.30.1"
+}
+
+################################################################################
+# Network Variables
+################################################################################
+
+variable "vcn_id" {
+  description = "OCID of the VCN"
+  type        = string
+}
+
+variable "lb_subnet_ids" {
+  description = "OCIDs of the load balancer subnets"
+  type        = list(string)
+}
+
+variable "nodepool_subnet_ids" {
+  description = "OCIDs of the node pool subnets"
+  type        = list(string)
+}
+
+variable "api_endpoint_subnet_id" {
+  description = "OCID of the API endpoint subnet"
+  type        = string
 }
 
 ################################################################################
@@ -66,23 +62,19 @@ variable "kubernetes_version" {
 variable "node_pool_size" {
   description = "Number of nodes in the node pool"
   type        = number
-  default     = 2
 }
 
 variable "node_shape" {
   description = "Shape of the worker nodes"
   type        = string
-  default     = "VM.Standard.E4.Flex"
 }
 
 variable "node_shape_config_ocpus" {
   description = "Number of OCPUs for flexible node shape"
   type        = number
-  default     = 2
 }
 
 variable "node_shape_config_memory_in_gbs" {
   description = "Amount of memory in GBs for flexible node shape"
   type        = number
-  default     = 16
 }

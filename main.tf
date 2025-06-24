@@ -1,40 +1,51 @@
 ################################################################################
-# VPC Module
+# VCN Module
 ################################################################################
 
-module "vpc" {
-  source = "./modules/vpc"
+module "vcn" {
+  source = "./modules/vcn"
 
-  main-region = var.main-region
-  profile     = var.profile
+  compartment_ocid = var.compartment_ocid
+  region           = var.region
+  environment      = var.environment
 }
 
 ################################################################################
-# EKS Cluster Module
+# OKE Cluster Module
 ################################################################################
 
-module "eks" {
-  source = "./modules/eks-cluster"
+module "oke" {
+  source = "./modules/oke-cluster"
 
-  main-region = var.main-region
-  profile     = var.profile
-  rolearn     = var.rolearn
-
-  vpc_id          = module.vpc.vpc_id
-  private_subnets = module.vpc.private_subnets
+  compartment_ocid    = var.compartment_ocid
+  region              = var.region
+  cluster_name        = var.cluster_name
+  kubernetes_version  = var.kubernetes_version
+  environment         = var.environment
+  
+  vcn_id              = module.vcn.vcn_id
+  lb_subnet_ids       = module.vcn.public_subnet_ids
+  nodepool_subnet_ids = module.vcn.private_subnet_ids
+  api_endpoint_subnet_id = module.vcn.public_subnet_ids[0]
+  
+  node_pool_size                    = var.node_pool_size
+  node_shape                        = var.node_shape
+  node_shape_config_ocpus          = var.node_shape_config_ocpus
+  node_shape_config_memory_in_gbs  = var.node_shape_config_memory_in_gbs
 }
 
 ################################################################################
-# AWS ALB Controller
+# Load Balancer Module
 ################################################################################
 
-module "aws_alb_controller" {
-  source = "./modules/aws-alb-controller"
+module "load_balancer" {
+  source = "./modules/load-balancer"
 
-  main-region  = var.main-region
-  env_name     = var.env_name
-  cluster_name = var.cluster_name
-
-  vpc_id            = module.vpc.vpc_id
-  oidc_provider_arn = module.eks.oidc_provider_arn
+  compartment_ocid = var.compartment_ocid
+  region           = var.region
+  environment      = var.environment
+  
+  vcn_id           = module.vcn.vcn_id
+  public_subnet_ids = module.vcn.public_subnet_ids
+  cluster_id       = module.oke.cluster_id
 }
