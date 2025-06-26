@@ -40,6 +40,10 @@ module "eks" {
       AmazonEBSCSIDriverPolicy = "arn:aws:iam::aws:policy/service-role/AmazonEBSCSIDriverPolicy"
     }
   }
+<<<<<<< HEAD
+=======
+
+>>>>>>> 43ac8b553ab3be5befa9e94de02cfd71ec0a39a8
   eks_managed_node_groups = {
     for name, config in var.node_groups : name => {
       instance_types = config.instance_types
@@ -49,6 +53,7 @@ module "eks" {
       disk_size      = config.disk_size
       
       labels = config.labels
+<<<<<<< HEAD
       taints = config.taints
       
       tags = var.tags    }
@@ -56,6 +61,28 @@ module "eks" {
 
   # Enable IRSA (IAM Roles for Service Accounts)
   enable_irsa = true
+=======
+      
+      dynamic "taints" {
+        for_each = config.taints
+        content {
+          key    = taints.value.key
+          value  = taints.value.value
+          effect = taints.value.effect
+        }
+      }
+      
+      tags = var.tags
+    }
+  }
+
+  # aws-auth configmap
+  manage_aws_auth_configmap = length(var.aws_auth_roles) > 0 || length(var.aws_auth_users) > 0
+  create_aws_auth_configmap = length(var.aws_auth_roles) > 0 || length(var.aws_auth_users) > 0
+
+  aws_auth_roles = var.aws_auth_roles
+  aws_auth_users = var.aws_auth_users
+>>>>>>> 43ac8b553ab3be5befa9e94de02cfd71ec0a39a8
 
   tags = var.tags
 }
