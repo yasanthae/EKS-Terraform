@@ -5,15 +5,15 @@ output "lb_role_arn" {
 
 output "controller_status" {
   description = "Status of the AWS Load Balancer Controller"
-  value       = helm_release.alb_controller.status
+  value       = length(helm_release.alb_controller) > 0 ? helm_release.alb_controller[0].status : "Not deployed"
 }
 
 output "controller_namespace" {
   description = "Namespace where the controller is deployed"
-  value       = helm_release.alb_controller.namespace
+  value       = length(helm_release.alb_controller) > 0 ? helm_release.alb_controller[0].namespace : "Not deployed"
 }
 
 output "controller_version" {
   description = "Version of the AWS Load Balancer Controller"
-  value       = helm_release.alb_controller.version
+  value       = length(helm_release.alb_controller) > 0 ? helm_release.alb_controller[0].version : "Not deployed"
 }

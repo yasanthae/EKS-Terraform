@@ -52,6 +52,8 @@ resource "kubernetes_service_account" "alb_controller" {
 ################################################################################
 
 resource "helm_release" "alb_controller" {
+  count = 0  # Temporarily disabled - deploy infrastructure first
+
   name       = local.lb_controller_name
   repository = "https://aws.github.io/eks-charts"
   chart      = "aws-load-balancer-controller"

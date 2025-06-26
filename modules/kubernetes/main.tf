@@ -4,10 +4,9 @@
 
 locals {
   common_tags = merge(
-    var.tags,    {
-      module      = "kubernetes"
-      environment = var.environment
-      managed-by  = "terraform"
+    var.tags,
+    {
+      module = "kubernetes"
     }
   )
 }

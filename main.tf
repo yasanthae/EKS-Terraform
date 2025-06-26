@@ -46,9 +46,9 @@ provider "aws" {
 
 # GCP Provider
 provider "google" {
-  project = var.gcp_project_id
+  project = var.gcp_project_id != "" ? var.gcp_project_id : "dummy-project"
   region  = var.region
-  zone    = var.gcp_zone
+  zone    = var.gcp_zone != "" ? var.gcp_zone : "us-central1-a"
 }
 
 # Oracle Cloud Provider - Temporarily commented out for GCP-only deployment

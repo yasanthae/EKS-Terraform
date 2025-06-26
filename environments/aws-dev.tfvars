@@ -8,7 +8,7 @@ cloud_provider = "aws"
 # Common Configuration
 environment  = "dev"
 project_name = "multicloud"
-region       = "us-east-2"
+region       = "us-east-1"
 
 # Tags
 tags = {
@@ -20,7 +20,7 @@ tags = {
 
 # Network Configuration
 vpc_cidr             = "10.0.0.0/16"
-availability_zones   = ["us-east-2a", "us-east-2b", "us-east-2c"]
+availability_zones   = ["us-east-1a", "us-east-1b", "us-east-1c"]
 private_subnet_cidrs = ["10.0.1.0/24", "10.0.2.0/24", "10.0.3.0/24"]
 public_subnet_cidrs  = ["10.0.101.0/24", "10.0.102.0/24", "10.0.103.0/24"]
 enable_nat_gateway   = true
@@ -62,4 +62,8 @@ aws_auth_users = []
 # Backend Configuration (for reference - use backend config file)
 backend_bucket = "terraform-state-multicloud-dev"
 backend_key    = "aws/dev/terraform.tfstate"
-backend_region = "us-east-2"
+backend_region = "us-east-1"
+
+# GCP Dummy Variables (not used for AWS deployment)
+gcp_project_id = "dummy-project"
+gcp_zone       = "us-central1-a"
