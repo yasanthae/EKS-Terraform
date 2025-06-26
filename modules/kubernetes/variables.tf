@@ -32,16 +32,13 @@ variable "vpc_id" {
   description = "VPC/VCN ID"
   type        = string
 }
-
-<<<<<<< HEAD
+ 
 variable "vpc_name" {
   description = "VPC/VCN name (used for GCP)"
   type        = string
   default     = ""
 }
 
-=======
->>>>>>> 43ac8b553ab3be5befa9e94de02cfd71ec0a39a8
 variable "private_subnet_ids" {
   description = "List of private subnet IDs"
   type        = list(string)
