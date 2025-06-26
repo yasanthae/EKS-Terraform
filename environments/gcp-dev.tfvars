@@ -46,7 +46,7 @@ node_groups = {
 }
 
 # GCP Specific Configuration
-gcp_project_id            = "my-gcp-project-id"
+gcp_project_id            = "terraformproject-464104"  # Replace with your real project ID
 gcp_zone                  = "us-central1-a"
 gcp_service_account_email = ""  # Will be created by the module
 

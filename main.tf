@@ -14,10 +14,10 @@ terraform {
       source  = "hashicorp/google"
       version = ">= 5.0"
     }
-    oci = {
-      source  = "oracle/oci"
-      version = ">= 5.0"
-    }
+    # oci = {
+    #   source  = "oracle/oci"
+    #   version = ">= 5.0"
+    # }
     kubernetes = {
       source  = "hashicorp/kubernetes"
       version = ">= 2.0"
@@ -51,25 +51,13 @@ provider "google" {
   zone    = var.gcp_zone
 }
 
-# Oracle Cloud Provider
-provider "oci" {
-  tenancy_ocid     = var.oci_tenancy_ocid
-  user_ocid        = var.oci_user_ocid
-  fingerprint      = var.oci_fingerprint
-  private_key_path = var.oci_private_key_path
-  region           = var.region
-}
-
-################################################################################
-# Backend Configuration
-################################################################################
-
-terraform {
-  backend "s3" {
-    # Backend configuration will be provided via backend config file or CLI args
-    # This allows flexibility across different cloud providers
-  }
-}
+# Oracle Cloud Provider - Temporarily commented out for GCP-only deployment
+# provider "oci" {
+#   # Use config file approach instead of direct parameters
+#   # This allows us to use a dummy config file when not deploying to OCI
+#   config_file_profile = "DEFAULT"
+#   config_file_path    = "C:\\temp\\dummy_oci_config"
+# }
 
 ################################################################################
 # Network Module
@@ -115,9 +103,9 @@ module "kubernetes" {
   # Cluster Configuration
   cluster_name       = var.cluster_name
   kubernetes_version = var.kubernetes_version
-  
-  # Network Configuration from Network Module
+    # Network Configuration from Network Module
   vpc_id              = module.network.vpc_id
+  vpc_name            = module.network.vpc_name
   private_subnet_ids  = module.network.private_subnet_ids
   
   # Node Configuration
@@ -176,36 +164,10 @@ provider "kubernetes" {
 }
 
 provider "helm" {
-  kubernetes {
+  kubernetes = {
     host                   = module.kubernetes.cluster_endpoint
     cluster_ca_certificate = base64decode(module.kubernetes.cluster_ca_certificate)
-    
-    # AWS EKS
-    dynamic "exec" {
-      for_each = var.cloud_provider == "aws" ? [1] : []
-      content {
-        api_version = "client.authentication.k8s.io/v1beta1"
-        command     = "aws"
-        args        = ["eks", "get-token", "--cluster-name", module.kubernetes.cluster_name]
-      }
-    }
-    
-    # GCP GKE
-    token = var.cloud_provider == "gcp" ? module.kubernetes.cluster_token : null
-    
-    # OCI OKE
-    dynamic "exec" {
-      for_each = var.cloud_provider == "oci" ? [1] : []
-      content {
-        api_version = "client.authentication.k8s.io/v1beta1"
-        command     = "oci"
-        args = [
-          "ce", "cluster", "generate-token",
-          "--cluster-id", module.kubernetes.cluster_id,
-          "--region", var.region
-        ]
-      }
-    }
+    token                  = var.cloud_provider == "gcp" ? module.kubernetes.cluster_token : null
   }
 }
 

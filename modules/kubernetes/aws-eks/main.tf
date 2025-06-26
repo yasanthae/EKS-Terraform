@@ -4,7 +4,7 @@
 
 module "eks" {
   source  = "terraform-aws-modules/eks/aws"
-  version = "~> 19.0"
+  version = "~> 20.0"
 
   cluster_name    = var.cluster_name
   cluster_version = var.kubernetes_version
@@ -40,7 +40,6 @@ module "eks" {
       AmazonEBSCSIDriverPolicy = "arn:aws:iam::aws:policy/service-role/AmazonEBSCSIDriverPolicy"
     }
   }
-
   eks_managed_node_groups = {
     for name, config in var.node_groups : name => {
       instance_types = config.instance_types
@@ -50,26 +49,13 @@ module "eks" {
       disk_size      = config.disk_size
       
       labels = config.labels
+      taints = config.taints
       
-      dynamic "taints" {
-        for_each = config.taints
-        content {
-          key    = taints.value.key
-          value  = taints.value.value
-          effect = taints.value.effect
-        }
-      }
-      
-      tags = var.tags
-    }
+      tags = var.tags    }
   }
 
-  # aws-auth configmap
-  manage_aws_auth_configmap = length(var.aws_auth_roles) > 0 || length(var.aws_auth_users) > 0
-  create_aws_auth_configmap = length(var.aws_auth_roles) > 0 || length(var.aws_auth_users) > 0
-
-  aws_auth_roles = var.aws_auth_roles
-  aws_auth_users = var.aws_auth_users
+  # Enable IRSA (IAM Roles for Service Accounts)
+  enable_irsa = true
 
   tags = var.tags
 }

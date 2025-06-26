@@ -45,16 +45,16 @@ module "gcp_lb" {
 }
 
 ################################################################################
-# OCI Load Balancer (uses OCI native load balancer)
+# OCI Load Balancer - Temporarily commented out
 ################################################################################
 
-module "oci_lb" {
-  source = "./oci-lb"
-  count  = var.cloud_provider == "oci" ? 1 : 0
-  
-  cluster_name   = var.cluster_name
-  cluster_id     = var.cluster_id
-  compartment_id = var.oci_compartment_id
-  
-  tags = local.common_tags
-}
+# module "oci_lb" {
+#   source = "./oci-lb"
+#   count  = var.cloud_provider == "oci" ? 1 : 0
+#   
+#   cluster_name   = var.cluster_name
+#   cluster_id     = var.cluster_id
+#   compartment_id = var.oci_compartment_id
+#   
+#   tags = local.common_tags
+# }

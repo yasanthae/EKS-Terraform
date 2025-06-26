@@ -24,8 +24,24 @@ resource "google_compute_subnetwork" "private" {
   region        = var.region
   network       = google_compute_network.vpc.id
   project       = var.project_id
+    private_ip_google_access = true
   
-  private_ip_google_access = true
+  # Secondary ranges for GKE pods and services - only for first subnet
+  dynamic "secondary_ip_range" {
+    for_each = count.index == 0 ? [1] : []
+    content {
+      range_name    = "gke-pods"
+      ip_cidr_range = "10.0.160.0/20"  # Keep existing range from first subnet
+    }
+  }
+  
+  dynamic "secondary_ip_range" {
+    for_each = count.index == 0 ? [1] : []
+    content {
+      range_name    = "gke-services"
+      ip_cidr_range = "10.0.200.0/24"  # Keep existing range from first subnet
+    }
+  }
   
   log_config {
     aggregation_interval = "INTERVAL_5_SEC"

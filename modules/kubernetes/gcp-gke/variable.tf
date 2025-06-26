@@ -18,7 +18,7 @@ variable "region" {
   type        = string
 }
 
-variable "vpc_id" {
+variable "vpc_name" {
   description = "VPC network name"
   type        = string
 }

@@ -5,13 +5,12 @@
 data "google_client_config" "default" {}
 
 data "google_compute_network" "vpc" {
-  name    = var.vpc_id
+  name    = var.vpc_name
   project = var.project_id
 }
 
 data "google_compute_subnetwork" "private" {
-  count   = length(var.private_subnet_ids)
-  name    = element(split("/", var.private_subnet_ids[count.index]), length(split("/", var.private_subnet_ids[count.index])) - 1)
+  name    = element(split("/", var.private_subnet_ids[0]), length(split("/", var.private_subnet_ids[0])) - 1)
   region  = var.region
   project = var.project_id
 }
@@ -21,14 +20,16 @@ resource "google_container_cluster" "primary" {
   location = var.region
   project  = var.project_id
   
+  # Disable deletion protection to allow terraform destroy
+  deletion_protection = false
+  
   # We can't create a cluster with no node pool defined, but we want to only use
   # separately managed node pools. So we create the smallest possible default
   # node pool and immediately delete it.
   remove_default_node_pool = true
   initial_node_count       = 1
-  
-  network    = data.google_compute_network.vpc.self_link
-  subnetwork = data.google_compute_subnetwork.private[0].self_link
+    network    = data.google_compute_network.vpc.self_link
+  subnetwork = data.google_compute_subnetwork.private.self_link
   
   # Kubernetes version
   min_master_version = var.kubernetes_version

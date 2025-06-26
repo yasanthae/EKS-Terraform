@@ -2,8 +2,8 @@ output "cluster_id" {
   description = "The ID of the Kubernetes cluster"
   value = coalesce(
     try(module.aws_eks[0].cluster_id, ""),
-    try(module.gcp_gke[0].cluster_id, ""),
-    try(module.oci_oke[0].cluster_id, "")
+    try(module.gcp_gke[0].cluster_id, "")
+    # try(module.oci_oke[0].cluster_id, "")
   )
 }
 
@@ -11,8 +11,8 @@ output "cluster_name" {
   description = "The name of the Kubernetes cluster"
   value = coalesce(
     try(module.aws_eks[0].cluster_name, ""),
-    try(module.gcp_gke[0].cluster_name, ""),
-    try(module.oci_oke[0].cluster_name, "")
+    try(module.gcp_gke[0].cluster_name, "")
+    # try(module.oci_oke[0].cluster_name, "")
   )
 }
 
@@ -20,8 +20,8 @@ output "cluster_endpoint" {
   description = "Endpoint for Kubernetes API server"
   value = coalesce(
     try(module.aws_eks[0].cluster_endpoint, ""),
-    try(module.gcp_gke[0].cluster_endpoint, ""),
-    try(module.oci_oke[0].cluster_endpoint, "")
+    try(module.gcp_gke[0].cluster_endpoint, "")
+    # try(module.oci_oke[0].cluster_endpoint, "")
   )
 }
 
@@ -29,8 +29,8 @@ output "cluster_ca_certificate" {
   description = "Base64 encoded certificate data"
   value = coalesce(
     try(module.aws_eks[0].cluster_ca_certificate, ""),
-    try(module.gcp_gke[0].cluster_ca_certificate, ""),
-    try(module.oci_oke[0].cluster_ca_certificate, "")
+    try(module.gcp_gke[0].cluster_ca_certificate, "")
+    # try(module.oci_oke[0].cluster_ca_certificate, "")
   )
 }
 

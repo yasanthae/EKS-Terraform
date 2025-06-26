@@ -54,21 +54,21 @@ module "gcp_network" {
 }
 
 ################################################################################
-# OCI VCN Resources
+# OCI VCN Resources - Temporarily commented out
 ################################################################################
 
-module "oci_network" {
-  source = "./oci"
-  count  = var.cloud_provider == "oci" ? 1 : 0
-  
-  project_name         = var.project_name
-  environment          = var.environment
-  compartment_id       = var.oci_compartment_id
-  region               = var.region
-  vpc_cidr             = var.vpc_cidr
-  availability_zones   = var.availability_zones
-  private_subnet_cidrs = var.private_subnet_cidrs
-  public_subnet_cidrs  = var.public_subnet_cidrs
-  enable_nat_gateway   = var.enable_nat_gateway
-  tags                 = local.common_tags
-}
+# module "oci_network" {
+#   source = "./oci"
+#   count  = var.cloud_provider == "oci" ? 1 : 0
+#   
+#   project_name         = var.project_name
+#   environment          = var.environment
+#   compartment_id       = var.oci_compartment_id
+#   region               = var.region
+#   vpc_cidr             = var.vpc_cidr
+#   availability_zones   = var.availability_zones
+#   private_subnet_cidrs = var.private_subnet_cidrs
+#   public_subnet_cidrs  = var.public_subnet_cidrs
+#   enable_nat_gateway   = var.enable_nat_gateway
+#   tags                 = local.common_tags
+# }

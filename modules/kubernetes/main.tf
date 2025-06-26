@@ -6,9 +6,9 @@ locals {
   common_tags = merge(
     var.tags,
     {
-      Module      = "kubernetes"
-      Environment = var.environment
-      ManagedBy   = "terraform"
+      module      = "kubernetes"
+      environment = var.environment
+      managed-by  = "terraform"
     }
   )
 }
@@ -48,7 +48,7 @@ module "gcp_gke" {
   project_id         = var.gcp_project_id
   region             = var.region
   
-  vpc_id             = var.vpc_id
+  vpc_name           = var.vpc_name
   private_subnet_ids = var.private_subnet_ids
   
   node_groups = var.node_groups
@@ -57,22 +57,22 @@ module "gcp_gke" {
 }
 
 ################################################################################
-# OCI OKE
+# OCI OKE - Temporarily commented out
 ################################################################################
 
-module "oci_oke" {
-  source = "./oci-oke"
-  count  = var.cloud_provider == "oci" ? 1 : 0
-  
-  cluster_name       = var.cluster_name
-  kubernetes_version = var.kubernetes_version
-  compartment_id     = var.oci_compartment_id
-  region             = var.region
-  
-  vcn_id             = var.vpc_id
-  private_subnet_ids = var.private_subnet_ids
-  
-  node_groups = var.node_groups
-  
-  tags = local.common_tags
-}
+# module "oci_oke" {
+#   source = "./oci-oke"
+#   count  = var.cloud_provider == "oci" ? 1 : 0
+#   
+#   cluster_name       = var.cluster_name
+#   kubernetes_version = var.kubernetes_version
+#   compartment_id     = var.oci_compartment_id
+#   region             = var.region
+#   
+#   vcn_id             = var.vpc_id
+#   private_subnet_ids = var.private_subnet_ids
+#   
+#   node_groups = var.node_groups
+#   
+#   tags = local.common_tags
+# }
